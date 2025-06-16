@@ -3,14 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Srovnání hráčů</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+        <link href="https://unpkg.com/vis-timeline@7.4.9/styles/vis-timeline-graph2d.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/vis-timeline@7.4.9/standalone/umd/vis-timeline-graph2d.min.js"></script>
+</head>
+<body class="container" style="margin-top: 10px; margin-bottom: 20px">
+
+
+<h1>Srovnání hráčů</h1>
+<h2>Gantt chart</h2>
+<div id="visualization" style="width: 100%; max-height: 600px;"></div>
+
+
+<script>
+    const items = new vis.DataSet({{ items|safe }});
+
+    const options = {
+        stack: true,
+        horizontalScroll: true,
+        zoomKey: 'ctrlKey',
+        orientation: 'both',
+    };
+
+    const container = document.getElementById('visualization');
+    const timeline = new vis.Timeline(container, items, options);
+</script>
 <div style="display: flex; width: 30%;" id="charts"></div>
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<h2>Radar chart</h2>
+<div style="display: block; margin-left: 20%; margin-right: 20%">
+<canvas id="radarChart"></canvas>
+</div>
 
-<canvas id="radarChart" width="600" height="400"></canvas>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -35,6 +64,57 @@
 
         new Chart(ctx, config);
     });
+</script>
+
+<h2>Line charts</h2>
+
+
+<style>
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+        .chart-box {
+            width: 400px;
+            height: 300px;
+        }
+    </style>
+
+<div class="chart-container">
+    {% for chart in charts %}
+    <div class="chart-box">
+        <h4>{{ chart.title }}</h4>
+        <canvas id="{{ chart.id }}"></canvas>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    {% for chart in charts %}
+    const ctx{{ forloop.counter }} = document.getElementById('{{ chart.id }}').getContext('2d');
+    new Chart(ctx{{ forloop.counter }}, {
+        type: 'line',
+        data: {
+            labels: {{ chart.labels|safe }},
+            datasets: {{ chart.datasets|safe }}
+        },
+        options: {
+            responsive: true,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{{ chart.title }}'
+                }
+            }
+        }
+    });
+    {% endfor %}
 </script>
 </body>
 </html>

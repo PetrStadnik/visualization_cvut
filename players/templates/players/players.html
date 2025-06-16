@@ -15,7 +15,7 @@
 <body>
 <div class="container" style="margin-top: 10px; margin-bottom: 20px">
 <h1>Přehled hráčů</h1>
-<div id="visualization" style="width: 100%; height: 600px;"></div>
+<div id="visualization" style="width: 100%; max-height: 600px;"></div>
 
 <script>
     const items = new vis.DataSet({{ items|safe }});
@@ -55,7 +55,7 @@
 </div>
 <input class="form-control" id="myInput" type="text" placeholder="Hledat..">
 <br>
-<form method="post" action="{% url 'players:players' %} ">
+<form method="post" action="{% url 'players:radars' %} ">
 {% csrf_token %}
 <input type="submit" value="Vybrat" class="btn" style="display: flex;margin: 5px auto;">
 <div style="max-height: 500px;  overflow-y: scroll; border: solid 2px black">

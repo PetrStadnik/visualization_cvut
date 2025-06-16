@@ -39,8 +39,8 @@ class People(models.Model):
 
     def get_data_for_radio(self):
         data = dict()
-        data['weight'] = self.weight
-        data['height'] = self.height
+        data['weight'] = self.weight if self.weight else 0
+        data['height'] = self.height if self.height else 0
         gp = list(map(lambda k: int(k), list(self.batting_set.values_list("ab", flat=True))))
         h = list(map(lambda k: int(k), list(self.batting_set.values_list("h", flat=True))))
         hr = list(map(lambda k: int(k), list(self.batting_set.values_list("h", flat=True))))
@@ -48,12 +48,21 @@ class People(models.Model):
         data['h_avg'] = 0 if sum(gp) == 0 else sum(h)/sum(gp)
         data['hr_avg'] = 0 if sum(gp) == 0 else sum(hr)/len(gp)
         games = list(map(lambda k: int(k), list(self.pitching_set.values_list("g", flat=True))))
-        era = list(map(lambda k: int(k), list(self.batting_set.values_list("era", flat=True))))
-        so = list(map(lambda k: int(k), list(self.batting_set.values_list("so", flat=True))))
+        era = list(map(lambda k: int(k), list(self.pitching_set.values_list("era", flat=True))))
+        so = list(map(lambda k: int(k), list(self.pitching_set.values_list("so", flat=True))))
         data['era'] = 0 if len(era) == 0 else sum(era)/len(era)
         data['so'] = 0 if len(so) == 0 else sum(so)/len(so)
         print(data)
+        return list(data.values())
+
+    def get_data_for_linear(self):
+        data = dict()
+        data['years'] = list(map(lambda k: int(k), list(self.batting_set.values_list("yearid", flat=True))))
+        data['games'] = list(map(lambda k: int(k), list(self.pitching_set.values_list("g", flat=True))))
+        data['hr'] = list(map(lambda k: int(k), list(self.batting_set.values_list("hr", flat=True))))
+        data['era'] = list(map(lambda k: int(k), list(self.pitching_set.values_list("era", flat=True))))
         return data
+        
 
 
     def __str__(self):

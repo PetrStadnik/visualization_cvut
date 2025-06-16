@@ -23,4 +23,5 @@ app_name = 'players'
 urlpatterns = [
     path('players', views.show_players, name='players'),
     path('radars', views.radar_charts_view, name='radars'),
+    path('', views.index_view, name='index'),
 ]
