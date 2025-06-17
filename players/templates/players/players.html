@@ -31,17 +31,6 @@
     const timeline = new vis.Timeline(container, items, options);
 </script>
 
-
-<H1>Statistiky hráče: </H1>
-    {% if player_stat %}
-        {% for key, value in player_stat%}
-            <br>-> {{ key }} : ---> {{ value }}
-        {% endfor %}
-    {% else %}
-    Vyberte hráče...
-    {% endif %}
-
-
 <H2>Najděte hráče pro srovnání </H2>
 <div style="display: flex;">
   <div class="col" style="width: 30%; margin: auto; margin-bottom: 30px;">

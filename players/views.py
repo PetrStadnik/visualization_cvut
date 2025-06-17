@@ -94,7 +94,7 @@ def radar_charts_view(request):
             player_stats[p.get_full_name()] = p.get_data_for_radio()
 
         print(player_stats)
-        labels = ["Hmotnost", "Výška", "Úspěšných odpalů %", "Houmranů %", "ERA", "SO"]
+        labels = ["Hmotnost", "Výška", "Úspěšných odpalů", "Houmranů", "ERA", "SO"]
         maxes = list()
         for i in range(len(labels)):
             maxes.append(max([player_stats[k][i] for k in player_stats.keys()]))
